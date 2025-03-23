@@ -1,0 +1,255 @@
+// Import custom variables first
+@import "variables.scss";
+
+// Then import Bootstrap
+@import "~bootstrap/scss/bootstrap.scss";
+@import "../../node_modules/bootstrap-icons/font/bootstrap-icons.css";  
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500&display=swap');
+
+
+body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.5;
+    font-weight: 200;
+}
+
+.card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    font-family: 'Black Han Sans', sans-serif;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+}
+
+.genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.masonry-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.masonry-grid > * {
+    flex: 1 1 300px;
+    max-width: 400px;
+}
+
+.lazy-image {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.lazy-image.loaded {
+    opacity: 1;
+}
+
+.glass-effect {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+    z-index: 1;
+    pointer-events: none;
+    
+    .gsap-card:hover & {
+        backdrop-filter: none;
+    }
+}
+
+.image-container {
+    position: relative;
+    
+    img {
+        position: relative;
+        z-index: 0;
+    }
+}
+
+.gsap-image {
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    
+    &:hover {
+        transform: scale(1.55);
+    }
+}
+
+.gsap-card {
+    transition: transform 0.3s ease, filter 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+        z-index: 2;
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        
+        img {
+            transform: scale(1.1);
+        }
+    }
+}
+
+.modern-card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #2d2d2d;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    
+    &:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+    .image-container {
+        height: 250px;
+        
+        img {
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+    }
+    
+    .image-overlay {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+    
+    .content-overlay {
+        transform: translateY(0);
+        transition: transform 0.3s ease;
+    }
+    
+    &:hover {
+        .image-container img {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+        
+        .image-overlay {
+            opacity: 1;
+        }
+        
+        .content-overlay {
+            transform: translateY(-5px);
+        }
+    }
+    
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+    
+    .genre-tags {
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+}
+
+
+.link-animate {
+    position: relative;
+    text-decoration: none;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 0;
+        height: 1px;
+        background: currentColor;
+        transition: width 0.3s ease;
+    }
+    
+    &:hover::after {
+        width: 100%;
+    }
+}
+
+.search-container {
+    width: 100%;
+    padding: 20px;
+}
+
+.search-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.search-box {
+    position: relative;
+    width: 100%;
+    transition: all 0.3s ease;
+    
+    &.animate__fadeInDown {
+        animation-duration: 0.5s;
+    }
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 50px;
+    font-size: 1.2rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 20px rgba(74, 144, 226, 0.2);
+    transform: scale(1.02);
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.clear-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: none;
+}
+
+/* Overlay styles */
+.search-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+}
+
+/* Active search state */
+.search-active .search-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    z-index: 1000;
+}

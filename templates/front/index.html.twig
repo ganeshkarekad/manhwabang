@@ -1,0 +1,161 @@
+{% extends 'front/page.html.twig' %}
+
+{% block content %}
+
+{% import 'front/includes/macro.html.twig' as macro %}
+
+{# Sample comic data array #}
+{% set comics = [
+    {
+        title: 'One Piece',
+        description: 'Adventure on the high seas',
+        image: 'https://picsum.photos/400/600?random=1',
+        year: '1999',
+        status: 'Ongoing',
+        chapters: '1084'
+    },
+    {
+        title: 'Naruto',
+        description: 'Ninja adventures in Hidden Leaf Village',
+        image: 'https://picsum.photos/400/600?random=2',
+        year: '1999',
+        status: 'Completed',
+        chapters: '700'
+    },
+    {
+        title: 'Dragon Ball',
+        description: 'Martial arts and super-powered battles',
+        image: 'https://picsum.photos/400/600?random=3',
+        year: '1984',
+        status: 'Completed',
+        chapters: '519'
+    },
+    {
+        title: 'Attack on Titan',
+        description: 'Humanity\'s struggle for survival',
+        image: 'https://picsum.photos/400/600?random=4',
+        year: '2009',
+        status: 'Completed',
+        chapters: '139'
+    },
+    {
+        title: 'My Hero Academia',
+        description: 'Superhero school adventures',
+        image: 'https://picsum.photos/400/600?random=5',
+        year: '2014',
+        status: 'Ongoing',
+        chapters: '402'
+    },
+    {
+        title: 'Death Note',
+        description: 'Psychological thriller',
+        image: 'https://picsum.photos/400/600?random=6',
+        year: '2003',
+        status: 'Completed',
+        chapters: '108'
+    },
+    {
+        title: 'Demon Slayer',
+        description: 'Demon hunting in Taisho-era Japan',
+        image: 'https://picsum.photos/400/600?random=7',
+        year: '2016',
+        status: 'Completed',
+        chapters: '205'
+    },
+    {
+        title: 'Jujutsu Kaisen',
+        description: 'Modern supernatural battles',
+        image: 'https://picsum.photos/400/600?random=8',
+        year: '2018',
+        status: 'Ongoing',
+        chapters: '236'
+    },
+    {
+        title: 'Chainsaw Man',
+        description: 'Devil hunting action',
+        image: 'https://picsum.photos/400/600?random=9',
+        year: '2018',
+        status: 'Ongoing',
+        chapters: '146'
+    },
+    {
+        title: 'Bleach',
+        description: 'Soul reaper adventures',
+        image: 'https://picsum.photos/400/600?random=10',
+        year: '2001',
+        status: 'Completed',
+        chapters: '686'
+    }
+] %}
+
+<div class="search-container mb-4">
+    <div class="search-wrapper">
+        <div class="search-box">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search..." id="searchInput">
+            <i class="bi bi-x-lg clear-icon" id="clearSearch"></i>
+        </div>
+    </div>
+</div>
+
+<section id="latestComics" class="shadow-lg py-4 mb-5 bg-dark">
+    <h2 class="text-center mb-4">Latest Manhwa</h2>
+    <div class="masonry-grid">
+        {% set statuses = ['ongoing', 'completed', 'dropped'] %}
+        {% for comic in comics %}
+            {{ macro.comic_card(
+                comic.image,
+                comic.title,
+                comic.chapters,
+                comic.image,
+                ['isekai', 'action'],
+                statuses[random(statuses|length - 1)]
+            ) }}
+        {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+        <button class="btn btn-lg btn-primary load-more-btn text-white">
+            <i class="bi bi-plus-circle me-2"></i> Load More
+        </button>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const clearButton = document.getElementById('clearSearch');
+    const body = document.body;
+
+    // Create overlay element
+    const overlay = document.createElement('div');
+    overlay.className = 'search-overlay';
+    document.body.appendChild(overlay);
+
+    searchInput.addEventListener('focus', function() {
+        body.classList.add('search-active');
+        overlay.style.display = 'block';
+    });
+
+    searchInput.addEventListener('blur', function() {
+        if (!searchInput.value) {
+            body.classList.remove('search-active');
+            overlay.style.display = 'none';
+        }
+    });
+
+    searchInput.addEventListener('input', function() {
+        clearButton.style.display = this.value ? 'block' : 'none';
+    });
+
+    clearButton.addEventListener('click', function() {
+        searchInput.value = '';
+        clearButton.style.display = 'none';
+        searchInput.focus();
+    });
+
+    overlay.addEventListener('click', function() {
+        searchInput.blur();
+    });
+});
+</script>
+{% endblock %}

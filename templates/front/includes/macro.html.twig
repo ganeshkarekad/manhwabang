@@ -1,0 +1,48 @@
+{% macro comic_card(thumbnail, title, chapterCount, link, genres, status, isHot = true) %}
+    <div class="card h-100 gsap-card bg-dark text-white">
+        <div class="image-container position-relative overflow-hidden">
+            <div class="glass-effect position-absolute w-100 h-100"></div>
+            <img 
+                src="{{ thumbnail }}" 
+                class="card-img-top gsap-image" 
+                alt="{{ title }}"
+                style="height: 300px; object-fit: cover; transition: transform 0.3s ease;"
+            >
+            {% if isHot %}
+                <span class="badge bg-danger position-absolute top-0 end-0 m-2 z-3">
+                    <i class="bi bi-fire"></i>
+                </span>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title text-truncate text-center">
+                <a href="{{ link }}" 
+                   class="text-decoration-none link-animate text-white"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="top"
+                   data-bs-title="{{ title }}">{{ title }}</a>
+            </h5>
+            <p class="card-text d-flex justify-content-between align-items-center">
+                <span>Chapters: {{ chapterCount }}</span>
+                <span class="badge {% if status == 'ongoing' %}bg-success{% elseif status == 'completed' %}bg-primary{% else %}bg-danger{% endif %}"
+                      data-bs-toggle="tooltip" 
+                      data-bs-placement="top" 
+                      data-bs-title="{{ status|capitalize }}">
+                    {% if status == 'ongoing' %}
+                        <i class="bi bi-arrow-repeat"></i>
+                    {% elseif status == 'completed' %}
+                        <i class="bi bi-check-circle"></i>
+                    {% else %}
+                        <i class="bi bi-exclamation-triangle"></i>
+                    {% endif %}
+                </span>
+            </p>
+            <div class="genre-tags mb-2">
+                {% for genre in genres %}
+                    <span class="badge bg-secondary me-1">{{ genre }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
