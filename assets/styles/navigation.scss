@@ -1,0 +1,72 @@
+
+  
+  :root {
+    --clr: #fff;
+  }
+  
+  .navigation-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--clr);
+  }
+  
+  .navigation {
+    width: 100vw;
+    height: 70px;
+    background: $primary;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navigation ul {
+    position: relative;
+    display: flex;
+    width: 350px;
+  }
+  
+  .navigation ul li {
+    position: relative;
+    list-style: none;
+    width: 70px;
+    height: 70px;
+    z-index: 1;
+  }
+  
+  .navigation ul li a {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .navigation ul li a .icon {
+    position: relative;
+    display: block;
+    font-size: 1.5em;
+    color: #fff;
+    line-height: 75px;
+    opacity: 0.75;
+    transition: 0.5s;
+  }
+  
+  .navigation ul li.active a .icon {
+    opacity: 1;
+    color: $primary;
+    transform: translateY(-8px);
+  }
+  
+  @media (max-width: 480px) {
+    .navigation {
+      zoom: 0.8;
+    }
+  }
+  
+  @media (max-width: 330px) {
+    .navigation {
+      zoom: 0.7;
+    }
+  }

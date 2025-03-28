@@ -1,0 +1,645 @@
+{% extends 'front/page.html.twig' %}
+
+{% block content %}
+{% import 'front/includes/macro.html.twig' as macro %}
+
+{# Example manhwa data array #}
+{% set manhwas = [
+    {title: 'Heavenly Demon', thumbnail: 'https://storage.ko-fi.com/cdn/useruploads/display/947368b4-e14c-4919-9ecb-b469f1e72875_demon_idol.jpg', 
+     chapter: 179, uploaded: '2023-10-15', isHot: true,
+     description: 'A fallen angel rises through the ranks of demonic idol industry'},
+    {title: 'Eleceed', thumbnail: 'https://storage.ko-fi.com/cdn/useruploads/post/f2f6e343-fbef-4b41-9fa0-3b3a97c3d080_eleceed-1.png', 
+     chapter: 168, uploaded: '2023-10-14', isHot: true,
+     description: 'Cat-powered superhero battles in a world of awakened ones'},
+    {title: 'Reincarnated Son', thumbnail: 'https://storage.ko-fi.com/cdn/useruploads/display/fed8aff4-b390-434b-b6a0-6a719eaff2da_duke.png', chapter: 550, uploaded: '2023-10-13', isHot: false,
+     description: 'Reborn as a noble heir, he seeks redemption through magical mastery'},
+    {title: 'Doting Father', thumbnail: 'https://storage.ko-fi.com/cdn/useruploads/display/8645fe62-8ddb-4357-bb56-94f8eadaaf3d_dotingddy.jpg', chapter: 142, uploaded: '2023-10-12', isHot: true,
+     description: 'Overprotective dad uses supernatural powers to shield his family'},
+    {title: 'Drug Devourer', thumbnail: 'https://storage.ko-fi.com/cdn/useruploads/display/fdc3968e-f4a6-42ea-9453-2af582c820af_druggie.png', chapter: 569, uploaded: '2023-10-11', isHot: false,
+     description: 'Alchemist consumes mysterious substances to gain cosmic powers'},
+    {title: '1st Year Max Manager', thumbnail: 'https://storage.ko-fi.com/cdn/useruploads/display/84d2c31f-56d7-42ee-b674-414a099bd3c0_maxlevelmanager.png', chapter: 543, uploaded: '2023-10-10', isHot: false,
+     description: 'College freshman manages supernatural beings in secret society'},
+    {title: 'Level 999 Mastermind', thumbnail: 'https://storage.ko-fi.com/cdn/useruploads/display/588a0f74-d679-4b17-b0f8-4fd6b1a9d719_999_mastermind.png', chapter: 112, uploaded: '2023-10-09', isHot: true,
+     description: 'Genius strategist plays real-life game with universe at stake'},
+    {title: 'Debut or die', thumbnail: 'https://storage.ko-fi.com/cdn/useruploads/display/26ca628b-ca94-491b-9ea9-5c4eeb32287e_debutordie.jpg', chapter: 450, uploaded: '2023-10-08', isHot: false},
+    {title: 'Wind Breaker', thumbnail: 'https://picsum.photos/300/450?random=9', chapter: 412, uploaded: '2023-10-07', isHot: false},
+    {title: 'Eleceed', thumbnail: 'https://picsum.photos/300/450?random=10', chapter: 230, uploaded: '2023-10-06', isHot: true},
+    {title: 'Weak Hero', thumbnail: 'https://picsum.photos/300/450?random=11', chapter: 230, uploaded: '2023-10-05', isHot: false},
+    {title: 'The Advanced Player of the Tutorial Tower', thumbnail: 'https://picsum.photos/300/450?random=12', chapter: 98, uploaded: '2023-10-04', isHot: true},
+    {title: 'Return of the Mount Hua Sect', thumbnail: 'https://picsum.photos/300/450?random=13', chapter: 112, uploaded: '2023-10-03', isHot: false},
+    {title: 'Legend of the Northern Blade', thumbnail: 'https://picsum.photos/300/450?random=14', chapter: 180, uploaded: '2023-10-02', isHot: true},
+    {title: 'Overgeared', thumbnail: 'https://picsum.photos/300/450?random=15', chapter: 150, uploaded: '2023-10-01', isHot: false},
+    {title: 'The Great Mage Returns After 4000 Years', thumbnail: 'https://picsum.photos/300/450?random=16', chapter: 120, uploaded: '2023-09-30', isHot: true},
+    {title: 'Second Life Ranker', thumbnail: 'https://picsum.photos/300/450?random=17', chapter: 180, uploaded: '2023-09-29', isHot: false},
+    {title: 'The Live', thumbnail: 'https://picsum.photos/300/450?random=18', chapter: 90, uploaded: '2023-09-28', isHot: true},
+    {title: 'The Tutorial Tower\'s Advanced Player', thumbnail: 'https://picsum.photos/300/450?random=19', chapter: 98, uploaded: '2023-09-27', isHot: false},
+    {title: 'A Returner\'s Magic Should Be Special', thumbnail: 'https://picsum.photos/300/450?random=20', chapter: 210, uploaded: '2023-09-26', isHot: true}
+] %}
+
+<style>
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#staff-picks {
+  height: 50vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+}
+
+.item {
+  width: 200px;
+  height: 300px;
+  list-style-type: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  background-position: center;
+  background-size: cover;
+  border-radius: 20px;
+  box-shadow: 0 20px 30px rgba(255,255,255,0.3) inset;
+  transition: transform 0.1s, left 0.75s, top 0.75s, width 0.75s, height 0.75s;
+
+  &:nth-child(1), &:nth-child(2) {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    border-radius: 0;
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  &:nth-child(3) { left: 50%; }
+  &:nth-child(4) { left: calc(50% + 220px); }
+  &:nth-child(5) { left: calc(50% + 440px); }
+  &:nth-child(6) { left: calc(50% + 660px); opacity: 0; }
+}
+
+.slider-content {
+  width: min(30vw,400px);
+  position: absolute;
+  top: 50%;
+  left: 3rem;
+  transform: translateY(-50%);
+  font: 400 0.85rem helvetica,sans-serif;
+  color: white;
+  text-shadow: 0 3px 8px rgba(0,0,0,0.5);
+  opacity: 0;
+  display: none;
+
+  & .title {
+    text-transform: uppercase;
+  }
+
+  & .description {
+    line-height: 1.7;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  & button {
+    width: fit-content;
+    background-color: rgba(0,0,0,0.1);
+    color: white;
+    border: 2px solid white;
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    cursor: pointer;
+  }
+}
+
+.item:nth-of-type(2) .slider-content {
+  display: block;
+  animation: show 0.75s ease-in-out 0.3s forwards;
+}
+
+@keyframes show {
+  0% {
+    filter: blur(5px);
+    transform: translateY(calc(-50% + 75px));
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.slider-nav {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  user-select: none;
+
+  & .btn {
+    background-color: rgba(255,255,255,0.5);
+    color: rgba(0,0,0,0.7);
+    border: 2px solid rgba(0,0,0,0.6);
+    margin: 0 0.25rem;
+    padding: 0.75rem;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(255,255,255,0.3);
+    }
+  }
+}
+
+@media (width > 650px) and (width < 900px) {
+  .slider-content {
+    & .title        { font-size: 1rem; }
+    & .description  { font-size: 0.7rem; }
+    & button        { font-size: 0.7rem; }
+  }
+  .item {
+    width: 160px;
+    height: 270px;
+
+    &:nth-child(3) { left: 50%; }
+    &:nth-child(4) { left: calc(50% + 170px); }
+    &:nth-child(5) { left: calc(50% + 340px); }
+    &:nth-child(6) { left: calc(50% + 510px); opacity: 0; }
+  }
+}
+
+@media (width < 650px) {
+  .slider-content {
+    & .title        { font-size: 0.9rem; }
+    & .description  { font-size: 0.65rem; }
+    & button        { font-size: 0.7rem; }
+  }
+  .item {
+    width: 130px;
+    height: 220px;
+
+    &:nth-child(3) { left: 50%; }
+    &:nth-child(4) { left: calc(50% + 140px); }
+    &:nth-child(5) { left: calc(50% + 280px); }
+    &:nth-child(6) { left: calc(50% + 420px); opacity: 0; }
+  }
+}
+
+</style>
+
+<section id="staff-picks">
+<main>
+  <ul class='slider'>
+      {% for manhwa in manhwas | slice(0,3) %}
+        <li class='item' style="background-image: url('{{ manhwa.thumbnail }}')">
+        <div class='slider-content'>
+            <h2 class='title'>{{ manhwa.title }}</h2>
+            <p class='description'> {{ manhwa.description }}  </p>
+            <button>Read More</button>
+        </div>
+        </li>
+    {% endfor %}
+      {% for manhwa in manhwas | slice(0,3) %}
+        <li class='item' style="background-image: url('{{ manhwa.thumbnail }}')">
+        <div class='slider-content'>
+            <h2 class='title'>{{ manhwa.title }}"</h2>
+            <p class='description'> {{ manhwa.description }}  </p>
+            <button>Read More</button>
+        </div>
+        </li>
+    {% endfor %}
+  </ul>
+  <nav class='slider-nav'>
+    <ion-icon class='btn prev' name="arrow-back-outline"></ion-icon>
+    <ion-icon class='btn next' name="arrow-forward-outline"></ion-icon>
+  </nav>
+</main>
+
+{# <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script> #}
+{# <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script> #}
+</section>
+<script>
+const slider = document.querySelector('.slider');
+
+function activate(e) {
+  const items = document.querySelectorAll('.item');
+  e.target.matches('.next') && slider.append(items[0])
+  e.target.matches('.prev') && slider.prepend(items[items.length-1]);
+}
+
+document.addEventListener('click',activate,false);
+</script>
+<style>
+@media (max-width: 768px) {
+    #featuredCarousel {
+        max-height: 60vh !important;
+    }
+}
+
+.staff-pick-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, #4a90e2, #6a5af9);
+    padding: 8px 20px;
+    border-radius: 25px;
+    color: white;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+    z-index: 2;
+    animation: float 3s ease-in-out infinite;
+}
+
+.staff-pick-badge i {
+    margin-right: 8px;
+    font-size: 1.1rem;
+    vertical-align: middle;
+}
+
+.carousel-content-overlay {
+    bottom: 5%; /* Changed from 10% */
+    left: 5%;
+    right: 5%;
+    padding: 1rem; /* Reduced from 1.5rem */
+    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+}
+
+/* Add mobile-specific adjustments */
+@media (max-width: 768px) {
+    #featuredCarousel {
+        max-height: 60vh !important;
+    }
+    .carousel-content-overlay {
+        bottom: 10%; /* Keep original position for mobile */
+        padding: 1.5rem;
+    }
+}
+
+/* Adjust font sizes */
+.display-5 {
+    font-size: clamp(1.5rem, 2.5vw, 2rem) !important; /* Responsive font size */
+}
+
+.text-white-50 {
+    font-size: clamp(0.9rem, 1.2vw, 1rem) !important; /* Responsive description */
+}
+
+.staff-pick-badge {
+    font-size: clamp(0.8rem, 1vw, 1rem) !important; /* Responsive badge text */
+    padding: 6px 15px; /* Reduced padding */
+    top: 10px; /* Adjusted position */
+}
+.chapter-badge {
+    font-size: 0.9rem;
+    display: inline-block;
+    backdrop-filter: brightness(120%);
+}
+
+.upload-info {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.carousel-image-container {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 20px;
+    .thumbnail-wrapper {
+        border: 3px solid rgba(255,255,255,0.1);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: center;
+    }
+    
+    .thumbnail-wrapper:hover {
+        border-color: rgba(74, 144, 226, 0.5);
+        box-shadow: 0 0 30px rgba(74, 144, 226, 0.3);
+    }
+    
+    .content-wrapper {
+        position: relative;
+        z-index: 1;
+        transition: transform 0.3s ease;
+    }
+    
+    .chapter-badge {
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+        backdrop-filter: brightness(120%);
+    }
+    
+    .upload-info {
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
+    
+    .btn-primary {
+        transition: all 0.3s ease;
+        transform-style: preserve-3d;
+    }
+    
+    .btn-primary:hover {
+        letter-spacing: 1px;
+    }
+    
+    @media (max-width: 768px) {
+        .thumbnail-wrapper {
+            max-width: 200px;
+            margin: 0 auto 2rem;
+        }
+        
+        .col-md-4 {
+            order: 1;
+        }
+        
+        .col-md-8 {
+            order: 2;
+        }
+        
+        .display-4 {
+            font-size: 2rem !important;
+        }
+    }
+    
+    @keyframes contentEntrance {
+        0% {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+}
+
+.carousel-control-prev, .carousel-control-next {
+    width: 8%;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const carousel = new bootstrap.Carousel('#featuredCarousel', {
+        interval: 7000,
+        wrap: true
+    });
+
+    // Enhanced slide transitions
+    document.querySelectorAll('.carousel-item').forEach(item => {
+        item.addEventListener('slid.bs.carousel', e => {
+            motion.animate(e.target, { x: ['100%', '0%'] }, { duration: 0.8 });
+        });
+    });
+
+    // Spotlight effect
+    document.querySelector('#featuredCarousel').addEventListener('mousemove', e => {
+        const cards = document.querySelectorAll('.carousel-image-container');
+        cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.transform = `perspective(1000px) rotateX(${(y - rect.height/2)/20}deg) rotateY(${-(x - rect.width/2)/20}deg)`;
+        });
+    });
+
+    // Initialize Motion with spring physics
+    motion.initialize(
+        document.querySelectorAll('[data-motion]'),
+        {
+            hover: { scale: 1.05 },
+            press: { scale: 0.95 },
+            restDelta: 0.01,
+            stiffness: 300,
+            damping: 15
+        }
+    );
+});
+</script>
+
+<section id="search-section">
+    <div class="search-container text-center py-5" data-motion="fadeInDown">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-8">
+                    <div class="input-group search-trigger" data-motion data-hoverable>
+                        <span class="input-group-text bg-primary text-white border-0">
+                            <i class="bi bi-search-heart fs-4"></i>
+                        </span>
+                        <input type="text" class="form-control form-control-lg search-input" 
+                               placeholder="Search your favorite manhwa..." 
+                               data-motion="pulse"
+                               data-motion-interval="2">
+                        <button class="btn btn-primary text-white search-button" 
+                                type="button"
+                                data-motion="tilt"
+                                data-motion-hover="scale(1.1)">
+                            <i class="bi bi-rocket-takeoff"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-overlay" data-motion data-state="inactive">
+        <button class="close-button" data-motion="rotate" data-motion-hover="rotate(90deg)">
+            <i class="bi bi-x-circle fs-1"></i>
+        </button>
+        <div class="search-modal" data-motion="slideDown">
+            <div class="input-group">
+                <input type="text" class="form-control form-control-lg" 
+                       placeholder="Start typing to search..." 
+                       data-motion="pulse"
+                       data-motion-interval="1.5">
+                <button class="btn btn-primary text-white">
+                    <i class="bi bi-stars"></i> Find Manhwa
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="masonry-grid" data-masonry='{"percentPosition": true}' style="background: linear-gradient(45deg, rgba(0, 128, 128, 0.1) 25%, transparent 25%, transparent 75%, rgba(0, 128, 128, 0.1) 75%, rgba(0, 128, 128, 0.1)), linear-gradient(45deg, rgba(0, 128, 128, 0.1) 25%, transparent 25%, transparent 75%, rgba(0, 128, 128, 0.1) 75%, rgba(0, 128, 128, 0.1)); background-size: 50px 50px; background-position: 0 0, 25px 25px;">
+    <div class="comic-grid">
+        {% for manhwa in manhwas %}
+            <div class="manhwa-card is-loading">
+                <div class="card-image">
+                    <img src="{{ manhwa.thumbnail }}" alt="{{ manhwa.title }}" loading="lazy">
+                    <div class="card-overlay">
+                        <h3 class="card-title">{{ manhwa.title }}</h3>
+                        <div class="card-details">
+                            <p>Chapter {{ manhwa.chapter }}</p>
+                            <p>Uploaded: {{ manhwa.uploaded }}</p>
+                        </div>
+                        {% if manhwa.isHot %}
+                            <span class="hot-badge bg-primary">
+                                <i class="bi bi-fire"></i>
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <style>
+    .comic-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+        justify-content: center;
+    }
+    
+    .manhwa-card {
+        position: relative;
+        border-radius: 15px;
+        overflow: hidden;
+        width: 300px;
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    
+    .manhwa-card.is-loaded {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Keep existing card styles unchanged */
+    .card-image {
+        position: relative;
+        height: 450px;
+    }
+    
+    .card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    /* Rest of existing styles remain the same */
+    </style>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Reveal cards after all assets are loaded
+        window.addEventListener('load', function() {
+            document.querySelectorAll('.manhwa-card').forEach(card => {
+                // Check if image is loaded
+                const img = card.querySelector('img');
+                if (img.complete) {
+                    card.classList.add('is-loaded');
+                } else {
+                    img.addEventListener('load', () => {
+                        card.classList.add('is-loaded');
+                    });
+                }
+            });
+        });
+    });
+    </script>
+</section>
+
+<style>
+.manhwa-card {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 15px;
+    width: 300px;
+    transition: all 0.3s ease;
+}
+
+.card-image {
+    position: relative;
+    height: 450px;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 100%);
+    color: white;
+}
+
+.card-title {
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.card-details {
+    font-size: 0.9rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.hot-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff4757;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: white;
+    text-shadow: none;
+}
+
+.manhwa-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.manhwa-card:hover .card-image img {
+    transform: scale(1.05);
+}
+</style>
+
+<script>
+import { motion } from 'motion';
+
+document.querySelectorAll('.manhwa-card').forEach(card => {
+    motion(card, {
+        scale: 1,
+        rotate: 0
+    }, {
+        hover: {
+            scale: 1.02,
+            rotate: 1
+        },
+        press: {
+            scale: 0.98
+        }
+    });
+});
+</script>
+{% endblock %}
